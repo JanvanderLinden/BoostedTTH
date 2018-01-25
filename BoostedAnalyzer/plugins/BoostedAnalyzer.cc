@@ -418,7 +418,7 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
         else if(*itSel == "LeptonVetoSelection") selections.push_back(new LeptonVetoSelection());
         else if(*itSel == "BTagVetoSelection") selections.push_back(new BTagVetoSelection());
         else if(*itSel == "PhotonVetoSelection") selections.push_back(new PhotonVetoSelection());
-        else if(*itSel == "SingleMuonControlSelection") selections.push_back(new SingleMuonControlSelection());
+        else if(*itSel == "SingleMuonControlSelection") selections.push_back(new SingleMuonControlSelection(iConfig));
 	else cout << "No matching selection found for: " << *itSel << endl;
 	// connect added selection to cutflow
 	for (auto &c : cutflows){

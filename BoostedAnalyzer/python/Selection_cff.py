@@ -119,3 +119,8 @@ MonoJetSelection = cms.PSet(
     MonoJet_Chf=cms.double(0.1),
     MonoJet_Nhf=cms.double(0.8)
 )
+
+SingleMuonControlSelection = cms.PSet(
+    max_mt=cms.double(160),
+
+)

@@ -9,13 +9,15 @@ class SingleMuonControlSelection: public Selection{
   
   public:
     
-    SingleMuonControlSelection();
+    SingleMuonControlSelection(const edm::ParameterSet& iConfig);
+    SingleMuonControlSelection(double max_mt_=-1);
     ~SingleMuonControlSelection();
     void InitCutflow(Cutflow& cutflow);
     bool IsSelected(const InputCollections& input,Cutflow& cutflow);
 
 
   private:
+  	double max_mt;
 
 };
 
