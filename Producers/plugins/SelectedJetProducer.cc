@@ -62,6 +62,8 @@ private:
     // ----------member data ---------------------------
     /** input jets data access token **/
     edm::EDGetTokenT< pat::JetCollection > jetsToken;
+    /** input jets data access token fot Ax8ChhsSoftDropJets **/
+    edm::EDGetTokenT< pat::JetCollection > ak8jetsChsSoftDropToken;
     /** genjets data access token (for getcorrected jets) **/
     edm::EDGetTokenT< reco::GenJetCollection> genjetsToken;
     /** muons data access token (for jet cleaning)**/
@@ -108,6 +110,9 @@ SelectedJetProducer::SelectedJetProducer(const edm::ParameterSet& iConfig)
 {
     jetsToken  = consumes< pat::JetCollection >(iConfig.getParameter<edm::InputTag>("jets"));
     genjetsToken = consumes< reco::GenJetCollection >(iConfig.getParameter<edm::InputTag>("miniAODGenJets"));
+
+    ak8jetsChsSoftDropToken = consumes< pat::JetCollection >(iConfig.getParameter<edm::InputTag>("ak8jetsChsSoftDrop"));
+
     electronsToken  = consumes< pat::ElectronCollection >(iConfig.getParameter<edm::InputTag>("electrons"));
     muonsToken  = consumes< pat::MuonCollection >(iConfig.getParameter<edm::InputTag>("muons"));
     rhoToken  = consumes<double> (iConfig.getParameter<edm::InputTag>("rho") );
@@ -224,6 +229,11 @@ SelectedJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 	   iEvent.put(selectedJets,systName(collectionNames[i],systematics[j]));
        }
    }
+
+   //AK8PFCHSSoftDrop Jets
+   // edm::Handle< pat::JetCollection > h_inputJetsAk8ChsSoftDrop;
+   // iEvent.getByToken( ak8jetsChsSoftDropToken,h_inputJetsAk8ChsSoftDrop );
+   //TODO: Corrections
    
 }
 

@@ -123,6 +123,8 @@
 #include "BoostedTTH/BoostedAnalyzer/interface/DarkMatterProcessor.hpp"
 #include "BoostedTTH/BoostedAnalyzer/interface/MonoJetGenSelectionProcessor.hpp"
 #include "BoostedTTH/BoostedAnalyzer/interface/SingleMuonControlSelection.hpp"
+#include "BoostedTTH/BoostedAnalyzer/interface/monoVProcessor.hpp"
+
 
 //
 // class declaration
@@ -245,6 +247,8 @@ private:
     edm::EDGetTokenT< pat::TauCollection > selectedTausToken;
     /** loose photons token **/
     edm::EDGetTokenT< pat::PhotonCollection > selectedPhotonsLooseToken;
+    /**Ak8ChsSoftDrop token **/
+    std::vector<edm::EDGetTokenT< std::vector<pat::Jet> > > ak8jetsChsSoftDropTokens;
     /** loose jets data access token **/
     std::vector<edm::EDGetTokenT< std::vector<pat::Jet> > > selectedJetsTokens;
     /** tight jets data access token **/
@@ -269,6 +273,7 @@ private:
     edm::EDGetTokenT< std::vector<reco::GenParticle> > customGenTaus;
     edm::EDGetTokenT< std::vector<reco::GenJet> > customGenJets;
     edm::EDGetTokenT< std::vector<reco::GenJet> > customGenJetsLoose;
+
     
     //mem classifier for MVAVarProcessor
     MEMClassifier* pointerToMEMClassifier; 
@@ -345,6 +350,11 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
     for(auto &tag : iConfig.getParameter<std::vector<edm::InputTag> >("correctedMETs")){
 	     correctedMETsTokens.push_back(consumes< std::vector<pat::MET> >(tag));
     }
+    for(auto &tag : iConfig.getParameter<std::vector<edm::InputTag> >("ak8jetsChsSoftDrop")){
+         ak8jetsChsSoftDropTokens.push_back(consumes< std::vector<pat::Jet> >(tag));
+    }
+    // ak8jetsChsSoftDropToken = consumes< pat::JetCollection >(iConfig.getParameter<edm::InputTag>("ak8jetsChsSoftDrop"));
+
     boostedJetsToken        = consumes< boosted::BoostedJetCollection >(iConfig.getParameter<edm::InputTag>("boostedJets"));
     genInfoToken            = consumes< GenEventInfoProduct >(iConfig.getParameter<edm::InputTag>("genInfo"));
     lheInfoToken            = consumes< LHEEventProduct >(iConfig.getParameter<edm::InputTag>("lheInfo"));
@@ -553,6 +563,9 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
 	if(std::find(processorNames.begin(),processorNames.end(),"SlimmedNtuples")!=processorNames.end()) {
 	  treewriter->AddTreeProcessor(new SlimmedNtuples(),"SlimmedNtuples");
 	}
+    if(std::find(processorNames.begin(),processorNames.end(),"monoVProcessor")!=processorNames.end()) {
+      treewriter->AddTreeProcessor(new monoVProcessor(),"monoVProcessor");
+    }
 	if(std::find(processorNames.begin(),processorNames.end(),"DarkMatterProcessor")!=processorNames.end()) {
 		treewriter->AddTreeProcessor(new DarkMatterProcessor(),"DarkMatterProcessor");
         }
@@ -560,6 +573,7 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
 		treewriter->AddTreeProcessor(new MonoJetGenSelectionProcessor(),"MonoJetGenSelectionProcessor");
         }
     }
+
 
     // Genweights: Initialize the weightnames for the generator, that was used for this sample
     /*
@@ -652,6 +666,7 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     // JETs
     std::vector<edm::Handle< pat::JetCollection > >hs_selectedJets;
     std::vector<edm::Handle< pat::JetCollection > >hs_selectedJetsLoose;
+    std::vector<edm::Handle< pat::JetCollection > >hs_ak8jetsChsSoftDropJets;
     for(auto & selectedJetsToken : selectedJetsTokens){
     	edm::Handle< pat::JetCollection > h_selectedJets;
     	iEvent.getByToken( selectedJetsToken,h_selectedJets );
@@ -662,6 +677,14 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 	iEvent.getByToken( selectedJetsLooseToken,h_selectedJetsLoose );
 	hs_selectedJetsLoose.push_back(h_selectedJetsLoose);
     }
+    
+    for(auto & ak8jetsChsSoftDropToken : ak8jetsChsSoftDropTokens){
+        edm::Handle< pat::JetCollection > h_ak8jetsChsSoftDropJets;
+        iEvent.getByToken( ak8jetsChsSoftDropToken,h_ak8jetsChsSoftDropJets );
+        hs_ak8jetsChsSoftDropJets.push_back(h_ak8jetsChsSoftDropJets);
+    }
+    // edm::Handle< pat::JetCollection > h_ak8jetsChsSoftDropJets;
+    // iEvent.getByToken(ak8jetsChsSoftDropToken,h_ak8jetsChsSoftDropJets );
     
     // MET
     std::vector<edm::Handle< pat::METCollection > > hs_correctedMETs;
@@ -831,6 +854,7 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
                                           *h_selectedPhotonsLoose,
 					  *(hs_selectedJets[isys]),
 					  *(hs_selectedJetsLoose[isys]),
+                      *(hs_ak8jetsChsSoftDropJets[isys]),
 					  (*(hs_correctedMETs[isys]))[0],
 					  selectedBoostedJets[isys],
                                           selectedAk4Cluster,
