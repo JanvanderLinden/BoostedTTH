@@ -33,9 +33,9 @@ struct InputCollections{
    Constructor in which all references to the objects that are analyzed are set
  */
 InputCollections(   const EventInfo&                              eventInfo_,
-		    const TriggerInfo&                            triggerInfo_,
-		    const FilterInfo&                             filterInfo_,
-		    const std::vector<reco::Vertex>&              selectedPVs_,
+        const TriggerInfo&                            triggerInfo_,
+        const FilterInfo&                             filterInfo_,
+        const std::vector<reco::Vertex>&              selectedPVs_,
 
                     const std::vector<pat::Muon>&                 selectedMuons_,
                     const std::vector<pat::Muon>&                 selectedMuonsDL_,
@@ -47,7 +47,7 @@ InputCollections(   const EventInfo&                              eventInfo_,
                     const std::vector<pat::Photon>&               selectedPhotonsLoose_,
                     const std::vector<pat::Jet>&                  selectedJets_,
                     const std::vector<pat::Jet>&                  selectedJetsLoose_,
-                    const std::vector<pat::Jet>&                  ak8jetsChsSoftDrop_,
+                    const std::vector<pat::Jet>&                  AK8PFCHSSoftDropPackedJets_,
                     const pat::MET&                               correctedMET_,
                     const boosted::BoostedJetCollection&          selectedBoostedJets_,
                     const boosted::Ak4ClusterCollection&          selectedAk4Cluster_,
@@ -57,8 +57,8 @@ InputCollections(   const EventInfo&                              eventInfo_,
                     const SampleType                              sampleType_,
                     const HiggsDecay::HiggsDecay                  higgsDecay_,
                     const std::map<std::string,float>&            weights_,
-		    const edm::Event&                             iEvent_,
-		    const edm::EventSetup&                        iSetup_,
+        const edm::Event&                             iEvent_,
+        const edm::EventSetup&                        iSetup_,
                     const Systematics::Type&                      systematic_,
                     const std::vector<reco::GenJet>&              customGenJets_,
                     const std::vector<reco::GenJet>&              customGenJetsLoose_,
@@ -66,9 +66,9 @@ InputCollections(   const EventInfo&                              eventInfo_,
                     const std::vector<reco::GenParticle>&         customGenMuons_,
                     const std::vector<reco::GenParticle>&         customGenTaus_
                     
-		      /**** bjetness code ****/
+          /**** bjetness code ****/
 
-		            ):
+                ):
                     eventInfo(eventInfo_),
                     triggerInfo(triggerInfo_),
                     filterInfo(filterInfo_),
@@ -83,7 +83,7 @@ InputCollections(   const EventInfo&                              eventInfo_,
                     selectedPhotonsLoose(selectedPhotonsLoose_),
                     selectedJets(selectedJets_),
                     selectedJetsLoose(selectedJetsLoose_),
-                    ak8jetsChsSoftDrop(ak8jetsChsSoftDrop_),
+                    AK8PFCHSSoftDropPackedJets(AK8PFCHSSoftDropPackedJets_),
                     correctedMET(correctedMET_),
                     selectedBoostedJets(selectedBoostedJets_),
                     selectedAk4Cluster(selectedAk4Cluster_),
@@ -93,14 +93,14 @@ InputCollections(   const EventInfo&                              eventInfo_,
                     sampleType(sampleType_),
                     higgsDecay(higgsDecay_),
                     weights(weights_),
-		    iEvent(iEvent_),
-		    iSetup(iSetup_),
-		    systematic(systematic_),
-		    customGenJets(customGenJets_),
-		    customGenJetsLoose(customGenJetsLoose_),
-		    customGenElectrons(customGenElectrons_),
-		    customGenMuons(customGenMuons_),
-		    customGenTaus(customGenTaus_)
+        iEvent(iEvent_),
+        iSetup(iSetup_),
+        systematic(systematic_),
+        customGenJets(customGenJets_),
+        customGenJetsLoose(customGenJetsLoose_),
+        customGenElectrons(customGenElectrons_),
+        customGenMuons(customGenMuons_),
+        customGenTaus(customGenTaus_)
                     {}
 
 /**
@@ -110,12 +110,12 @@ InputCollections(   const InputCollections&                       input,
                     const std::vector<pat::Jet>&                  rawJets_,
                     const std::vector<pat::Jet>&                  selectedJets_,
                     const std::vector<pat::Jet>&                  selectedJetsLoose_,
-                    const std::vector<pat::Jet>&                  ak8jetsChsSoftDrop_,
+                    const std::vector<pat::Jet>&                  AK8PFCHSSoftDropPackedJets_,
                     const pat::MET&                               correctedMET_,
                     const boosted::BoostedJetCollection&          selectedBoostedJets_,
                     const boosted::Ak4ClusterCollection&          selectedAk4Cluster_,
                     const std::map<std::string,float>&            weights_
-        		    ): 
+                ): 
                     eventInfo(input.eventInfo),
                     triggerInfo(input.triggerInfo),
                     filterInfo(input.filterInfo),
@@ -130,7 +130,7 @@ InputCollections(   const InputCollections&                       input,
                     selectedPhotonsLoose(input.selectedPhotonsLoose),
                     selectedJets(selectedJets_),
                     selectedJetsLoose(selectedJetsLoose_),
-                    ak8jetsChsSoftDrop(ak8jetsChsSoftDrop_),
+                    AK8PFCHSSoftDropPackedJets(AK8PFCHSSoftDropPackedJets_),                    
                     correctedMET(correctedMET_),
                     selectedBoostedJets(selectedBoostedJets_),
                     selectedAk4Cluster(selectedAk4Cluster_),
@@ -140,14 +140,14 @@ InputCollections(   const InputCollections&                       input,
                     sampleType(input.sampleType),
                     higgsDecay(input.higgsDecay),
                     weights(weights_),
-		    iEvent(input.iEvent),
-		    iSetup(input.iSetup),
-		    systematic(input.systematic),
-		    customGenJets(input.customGenJets),
-		    customGenJetsLoose(input.customGenJetsLoose),
-		    customGenElectrons(input.customGenElectrons),
-		    customGenMuons(input.customGenMuons),
-		    customGenTaus(input.customGenTaus)
+        iEvent(input.iEvent),
+        iSetup(input.iSetup),
+        systematic(input.systematic),
+        customGenJets(input.customGenJets),
+        customGenJetsLoose(input.customGenJetsLoose),
+        customGenElectrons(input.customGenElectrons),
+        customGenMuons(input.customGenMuons),
+        customGenTaus(input.customGenTaus)
                     {}
 
   const EventInfo&                              eventInfo;
@@ -164,7 +164,7 @@ InputCollections(   const InputCollections&                       input,
   const std::vector<pat::Photon>&               selectedPhotonsLoose;
   const std::vector<pat::Jet>&                  selectedJets;
   const std::vector<pat::Jet>&                  selectedJetsLoose;
-  const std::vector<pat::Jet>&                  ak8jetsChsSoftDrop;
+  const std::vector<pat::Jet>&                  AK8PFCHSSoftDropPackedJets;
   const pat::MET&                               correctedMET;
   const boosted::BoostedJetCollection&          selectedBoostedJets;
   const boosted::Ak4ClusterCollection&          selectedAk4Cluster;
