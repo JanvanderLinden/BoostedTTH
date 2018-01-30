@@ -500,9 +500,7 @@ for s in systsJES:
 
 
 
-# process.options   = cms.untracked.PSet( SkipEvent = cms.untracked.vstring('ProductNotFound') )
-process.load("BoostedTTH.Producers.BoostedJetProducer_cfi")
-# process.BoostedJetProducer.jets=('slimmedJetsAK8PFCHSSoftDropPacked')
+process.load("BoostedTTH.Producers.Ak8JetProducer_cfi")
 
 
 
@@ -610,7 +608,7 @@ else:
   "MonoJetGenSelectionProcessor"
   )
 
-printContent=True
+printContent=False
 if printContent:
     process.content = cms.EDAnalyzer("EventContentAnalyzer")
 
@@ -661,7 +659,7 @@ process.p *= process.CorrectedMETproducer
 
 if printContent:
     process.p *= process.content
-    
-process.p *= process.BoostedJetProducer
+
+process.p *= process.Ak8JetProducer
 
 process.p *= process.BoostedAnalyzer
