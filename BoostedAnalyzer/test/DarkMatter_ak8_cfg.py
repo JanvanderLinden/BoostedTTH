@@ -576,7 +576,8 @@ process.BoostedAnalyzer.selectionNames = [
 "MonoJetSelection",
 "LeptonVetoSelection",
 "BTagVetoSelection",
-"PhotonVetoSelection"
+"PhotonVetoSelection",
+"monoVselection"
 ]
 if options.additionalSelection!="NONE":
   process.BoostedAnalyzer.selectionNames+=cms.vstring(options.additionalSelection)

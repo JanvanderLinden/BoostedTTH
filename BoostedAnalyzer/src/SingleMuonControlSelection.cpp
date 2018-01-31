@@ -2,7 +2,8 @@
 
 using namespace std;
 
-SingleMuonControlSelection::SingleMuonControlSelection (){}
+SingleMuonControlSelection::SingleMuonControlSelection (const edm::ParameterSet& iConfig):SingleMuonControlSelection(iConfig.getParameter<double>("max_mt")){}
+SingleMuonControlSelection::SingleMuonControlSelection (double max_mt_):max_mt(max_mt_){}
 SingleMuonControlSelection::~SingleMuonControlSelection (){}
 
 void SingleMuonControlSelection::InitCutflow(Cutflow& cutflow){
@@ -25,7 +26,7 @@ bool SingleMuonControlSelection::IsSelected(const InputCollections& input,Cutflo
   if(input.selectedMuons.size()!=1 || input.selectedElectronsLoose.size()>0 || input.selectedTaus.size() >0) {
     return false;
   }
-  if(mt>160){
+  if(mt>max_mt){
     return false;
   }
   else{

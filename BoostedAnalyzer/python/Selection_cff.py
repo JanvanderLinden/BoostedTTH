@@ -122,5 +122,14 @@ MonoJetSelection = cms.PSet(
 
 SingleMuonControlSelection = cms.PSet(
     max_mt=cms.double(160),
+)
+
+monoVselection = cms.PSet(
+    maxpt=cms.double(250),
+    maxeta=cms.double(2.4),
+    minPrunedMass=cms.double(65),
+    maxPrunedMass=cms.double(105),
+    tau21=cms.double(0.6)
 
 )
+
