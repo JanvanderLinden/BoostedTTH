@@ -15,7 +15,8 @@ public:
 	void Process(const InputCollections& input, VariableContainer& var);
 private:
 	float tau1, tau2, tau3 ;
-	bool monoVtag;
+	bool monoVtagged_ChsPrun;
+	bool monoVtagged_PuppiSoftDrop;
 };
 
 #endif

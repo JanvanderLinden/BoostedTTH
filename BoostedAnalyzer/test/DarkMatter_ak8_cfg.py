@@ -47,9 +47,9 @@ if not options.inputFiles:
         options.dataEra="2016B"
     else:
         # options.inputFiles=['root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/DMV_NNPDF30_Axial_Mphi-1000_Mchi-1_gSM-0p25_gDM-1p0_v2_13TeV-powheg/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/5AA7E144-8CB8-E611-A77C-0CC47AD99050.root']
-        # options.inputFiles=["root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/0CD978DB-0DB7-E611-9C28-141877344134.root"]
+        options.inputFiles=["root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/0CD978DB-0DB7-E611-9C28-141877344134.root"]
         # options.inputFiles=["root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/062203BC-C0C4-E611-A14A-BC305B390AB4.root"]
-        options.inputFiles=["root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/1476F163-D2C4-E611-9307-008CFAF558EE.root"]
+        # options.inputFiles=["root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/1476F163-D2C4-E611-9307-008CFAF558EE.root"]
 
 # checks for correct values and consistency
 if "data" in options.globalTag.lower() and not options.isData:

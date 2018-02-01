@@ -2,8 +2,8 @@
 
 using namespace std;
 
-monoVselection::monoVselection (const edm::ParameterSet& iConfig): monoVselection(iConfig.getParameter<double>("maxpt"), iConfig.getParameter<double>("maxeta"), iConfig.getParameter<double>("minPrunedMass"), iConfig.getParameter<double>("maxPrunedMass"), iConfig.getParameter<double>("tau21")) {}
-monoVselection::monoVselection (double maxpt_, double maxeta_, double minPrunedMass_, double maxPrunedMass_, double tau21_): maxpt(maxpt_), maxeta(maxeta_), minPrunedMass(minPrunedMass_), maxPrunedMass(maxPrunedMass_), tau21(tau21_) {}
+monoVselection::monoVselection (const edm::ParameterSet& iConfig): monoVselection(iConfig.getParameter<double>("minpt"), iConfig.getParameter<double>("maxeta"), iConfig.getParameter<double>("minPrunedMass"), iConfig.getParameter<double>("maxPrunedMass"), iConfig.getParameter<double>("maxtau21_chsPrun"), iConfig.getParameter<double>("minSoftDropMass"), iConfig.getParameter<double>("maxSoftDropMass"), iConfig.getParameter<double>("maxtau21_Puppi")) {}
+monoVselection::monoVselection (double minpt_, double maxeta_, double minPrunedMass_, double maxPrunedMass_, double maxtau21_chsPrun_, double minSoftDropMass_, double maxSoftDropMass_, double maxtau21_Puppi_): minpt(minpt_), maxeta(maxeta_), minPrunedMass(minPrunedMass_), maxPrunedMass(maxPrunedMass_), maxtau21_chsPrun(maxtau21_chsPrun_), minSoftDropMass(minSoftDropMass_), maxSoftDropMass(maxSoftDropMass_), maxtau21_Puppi(maxtau21_Puppi_) {}
 monoVselection::~monoVselection () {}
 
 void monoVselection::InitCutflow(Cutflow& cutflow) {
@@ -15,30 +15,64 @@ void monoVselection::InitCutflow(Cutflow& cutflow) {
 
 bool monoVselection::IsSelected(const InputCollections& input, Cutflow& cutflow) {
   if (!initialized) cerr << "monoVselection not initialized" << endl;
-  double tau1 = -1;
-  double tau2 = -1;
 
   pat::Jet *leadingJet = new pat::Jet;
   leadingJet = input.AK8Jets.at(0).clone();
 
-  tau1 = leadingJet->userFloat("NjettinessAK8:tau1");
-  tau2 = leadingJet->userFloat("NjettinessAK8:tau2");
 
-  double leadingJet_PrunedMass = leadingJet->userFloat("ak8PFJetsCHSPrunedMass");
-  double tau21 = tau2 / tau1;
+  //CHs+Pruning+NSubjettiness Vtag
+  float leadingJet_PrunedMass = leadingJet->userFloat("ak8PFJetsCHSPrunedMass");
+  float leadingJet_eta = leadingJet->eta();
+  float leadingJet_Pt = leadingJet->pt();
+  float leadingJet_tau1 = leadingJet->userFloat("NjettinessAK8:tau1");
+  float leadingJet_tau2 = leadingJet->userFloat("NjettinessAK8:tau2");
 
-  bool monoVtag = false;
-  
-  if (leadingJet->pt() > 250 && abs(leadingJet->eta()) < 2.4 && leadingJet_PrunedMass > 65 && leadingJet_PrunedMass < 105 && tau21 < 0.6 ) {
-    monoVtag = true;
+  float leadingJet_tau21 = leadingJet_tau2 / leadingJet_tau1;
+
+  monoVtagged_ChsPrun = false;
+
+  if (leadingJet_Pt > minpt && abs(leadingJet_eta) < maxeta && leadingJet_PrunedMass > minPrunedMass && leadingJet_PrunedMass < maxPrunedMass && leadingJet_tau21 < maxtau21_chsPrun ) {
+    monoVtagged_ChsPrun = true;
   }
 
-  if (monoVtag) {
+  if (monoVtagged_ChsPrun ) {
     return false;
   }
   else {
     cutflow.EventSurvivedStep("not monoVtagged", input.weights.at("Weight"));
     return true;
   }
+
+
+  //Puppi+SoftDrop+NSubjettiness Vtag
+  leadingJet_Pt             = leadingJet->userFloat("ak8PFJetsPuppiValueMap:pt");
+  leadingJet_eta       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:eta");
+  leadingJet_tau1       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
+  leadingJet_tau2       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
+
+  leadingJet_tau21 = leadingJet_tau2 / leadingJet_tau1;
+
+  TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
+  auto const & sdSubjetsPuppi = leadingJet->subjets("SoftDropPuppi");
+  for ( auto const & it : sdSubjetsPuppi ) {
+    puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(), it->correctedP4(0).eta(), it->correctedP4(0).phi(), it->correctedP4(0).mass());
+    puppi_softdrop += puppi_softdrop_subjet;
+  }
+
+  float leadingJet_softdrop_mass_puppi = puppi_softdrop.M();
+  monoVtagged_PuppiSoftDrop = false;
+
+  if (leadingJet_Pt > minpt && abs(leadingJet_eta) < maxeta && leadingJet_softdrop_mass_puppi > minSoftDropMass && leadingJet_softdrop_mass_puppi < maxSoftDropMass && leadingJet_tau21 < maxtau21_Puppi ) {
+    monoVtagged_PuppiSoftDrop = true;
+  }
+
+  if (monoVtagged_PuppiSoftDrop ) {
+    // return false;
+  }
+  else {
+    // cutflow.EventSurvivedStep("not Puppi+SoftDrop monoVtagged", input.weights.at("Weight"));
+    // return true;
+  }
+
 
 }

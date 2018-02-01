@@ -125,11 +125,15 @@ SingleMuonControlSelection = cms.PSet(
 )
 
 monoVselection = cms.PSet(
-    maxpt=cms.double(250),
+    minpt=cms.double(250),
     maxeta=cms.double(2.4),
+    
     minPrunedMass=cms.double(65),
     maxPrunedMass=cms.double(105),
-    tau21=cms.double(0.6)
+    maxtau21_chsPrun=cms.double(0.6),
 
+    minSoftDropMass=cms.double(65),
+    maxSoftDropMass=cms.double(105),
+    maxtau21_Puppi=cms.double(0.4),
 )
 
