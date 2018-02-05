@@ -41,6 +41,7 @@ void monoVProcessor::Init(const InputCollections& input, VariableContainer& vars
 void monoVProcessor::Process(const InputCollections& input, VariableContainer& vars) {
   if (!initialized) cerr << "tree processor not initialized" << endl;
   vars.FillVar( "N_Jets_Ak8", input.AK8Jets.size());
+  std::cout << "processing ak8 jets in monoVProcessor" << std::endl;
 
   for (std::vector<pat::Jet>::const_iterator itJet = input.AK8Jets.begin() ; itJet != input.AK8Jets.end(); ++itJet) {
     int iJet = itJet - input.AK8Jets.begin();
@@ -104,54 +105,54 @@ void monoVProcessor::Process(const InputCollections& input, VariableContainer& v
 
 
   }
+  if (input.AK8Jets.size() >= 1) {
+    pat::Jet *leadingJet = new pat::Jet;
+    leadingJet = input.AK8Jets.at(0).clone();
+
+    //CHs+Pruning+NSubjettiness Vtag
+    float leadingJet_PrunedMass = leadingJet->userFloat("ak8PFJetsCHSPrunedMass");
+    float leadingJet_eta = leadingJet->eta();
+    float leadingJet_Pt = leadingJet->pt();
+    float leadingJet_tau1 = leadingJet->userFloat("NjettinessAK8:tau1");
+    float leadingJet_tau2 = leadingJet->userFloat("NjettinessAK8:tau2");
+
+    float leadingJet_tau21 = leadingJet_tau2 / leadingJet_tau1;
+
+    monoVtagged_ChsPrun = false;
+    if (leadingJet_Pt > 250 && abs(leadingJet_eta) < 2.4 && leadingJet_PrunedMass > 65 && leadingJet_PrunedMass < 105 && leadingJet_tau21 < 0.6 ) {
+      monoVtagged_ChsPrun = true;
+      // cout << "tagged ChsPrun" << endl;
+    }
+
+    vars.FillVar( "monoVtagged_ChsPrun", monoVtagged_ChsPrun);
+
+    //Puppi+SoftDrop+NSubjettiness Vtag
+    monoVtagged_PuppiSoftDrop = false;
+
+    leadingJet_Pt             = leadingJet->userFloat("ak8PFJetsPuppiValueMap:pt");
+    leadingJet_eta       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:eta");
+    leadingJet_tau1       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
+    leadingJet_tau2       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
+    leadingJet_tau21 = leadingJet_tau2 / leadingJet_tau1;
+
+    TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
+    auto const & sdSubjetsPuppi = leadingJet->subjets("SoftDropPuppi");
+    for ( auto const & it : sdSubjetsPuppi ) {
+      puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(), it->correctedP4(0).eta(), it->correctedP4(0).phi(), it->correctedP4(0).mass());
+      puppi_softdrop += puppi_softdrop_subjet;
+    }
+
+    float leadingJet_softdrop_mass_puppi = puppi_softdrop.M();
 
 
-  pat::Jet *leadingJet = new pat::Jet;
-  leadingJet = input.AK8Jets.at(0).clone();
+    if (leadingJet_Pt > 250 && abs(leadingJet_eta) < 2.4 && leadingJet_softdrop_mass_puppi > 65 && leadingJet_softdrop_mass_puppi < 105 && leadingJet_tau21 < 0.4 ) {
+      monoVtagged_PuppiSoftDrop = true;
+      // cout << "tagged Puppi" << endl;
+    }
+    vars.FillVar( "monoVtagged_PuppiSoftDrop", monoVtagged_PuppiSoftDrop);
 
-  //CHs+Pruning+NSubjettiness Vtag
-  float leadingJet_PrunedMass = leadingJet->userFloat("ak8PFJetsCHSPrunedMass");
-  float leadingJet_eta = leadingJet->eta();
-  float leadingJet_Pt = leadingJet->pt();
-  float leadingJet_tau1 = leadingJet->userFloat("NjettinessAK8:tau1");
-  float leadingJet_tau2 = leadingJet->userFloat("NjettinessAK8:tau2");
-
-  float leadingJet_tau21 = leadingJet_tau2 / leadingJet_tau1;
-
-  monoVtagged_ChsPrun = false;
-  if (leadingJet_Pt > 250 && abs(leadingJet_eta) < 2.4 && leadingJet_PrunedMass > 65 && leadingJet_PrunedMass < 105 && leadingJet_tau21 < 0.6 ) {
-    monoVtagged_ChsPrun = true;
-    // cout << "tagged ChsPrun" << endl;
+    delete leadingJet;
   }
-
-  vars.FillVar( "monoVtagged_ChsPrun", monoVtagged_ChsPrun);
-
-  //Puppi+SoftDrop+NSubjettiness Vtag
-  monoVtagged_PuppiSoftDrop = false;
-
-  leadingJet_Pt             = leadingJet->userFloat("ak8PFJetsPuppiValueMap:pt");
-  leadingJet_eta       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:eta");
-  leadingJet_tau1       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
-  leadingJet_tau2       = leadingJet->userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
-  leadingJet_tau21 = leadingJet_tau2 / leadingJet_tau1;
-
-  TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
-  auto const & sdSubjetsPuppi = leadingJet->subjets("SoftDropPuppi");
-  for ( auto const & it : sdSubjetsPuppi ) {
-    puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(), it->correctedP4(0).eta(), it->correctedP4(0).phi(), it->correctedP4(0).mass());
-    puppi_softdrop += puppi_softdrop_subjet;
-  }
-
-  float leadingJet_softdrop_mass_puppi = puppi_softdrop.M();
-
-
-  if (leadingJet_Pt > 250 && abs(leadingJet_eta) < 2.4 && leadingJet_softdrop_mass_puppi > 65 && leadingJet_softdrop_mass_puppi < 105 && leadingJet_tau21 < 0.4 ) {
-    monoVtagged_PuppiSoftDrop = true;
-    // cout << "tagged Puppi" << endl;
-  }
-  vars.FillVar( "monoVtagged_PuppiSoftDrop", monoVtagged_PuppiSoftDrop);
-
-  delete leadingJet;
 
 
 
