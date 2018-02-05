@@ -86,6 +86,8 @@
 #include "BoostedTTH/BoostedAnalyzer/interface/PhotonVetoSelection.hpp"
 #include "BoostedTTH/BoostedAnalyzer/interface/SingleMuonControlSelection.hpp"
 #include "BoostedTTH/BoostedAnalyzer/interface/monoVselection.hpp"
+#include "BoostedTTH/BoostedAnalyzer/interface/DMControlSelection.hpp"
+
 
 
 #include "BoostedTTH/BoostedAnalyzer/interface/WeightProcessor.hpp"
@@ -432,6 +434,8 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
         else if (*itSel == "PhotonVetoSelection") selections.push_back(new PhotonVetoSelection());
         else if (*itSel == "SingleMuonControlSelection") selections.push_back(new SingleMuonControlSelection(iConfig));
         else if (*itSel == "monoVselection") selections.push_back(new monoVselection(iConfig));
+        else if (*itSel == "DMControlSelection") selections.push_back(new DMControlSelection(iConfig));
+
 
         else cout << "No matching selection found for: " << *itSel << endl;
         // connect added selection to cutflow
@@ -575,6 +579,9 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
         }
         if (std::find(processorNames.begin(), processorNames.end(), "MonoJetGenSelectionProcessor") != processorNames.end()) {
             treewriter->AddTreeProcessor(new MonoJetGenSelectionProcessor(), "MonoJetGenSelectionProcessor");
+        }
+        if (std::find(processorNames.begin(), processorNames.end(), "DMControlSelection") != processorNames.end()) {
+            treewriter->AddTreeProcessor(new MonoJetGenSelectionProcessor(), "DMControlSelection");
         }
     }
 

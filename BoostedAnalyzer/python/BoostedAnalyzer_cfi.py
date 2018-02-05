@@ -2,6 +2,8 @@ import FWCore.ParameterSet.Config as cms
 from BoostedTTH.BoostedAnalyzer.Selection_cff import *
 from BoostedTTH.BoostedAnalyzer.Inputs_cff import *
 from BoostedTTH.BoostedAnalyzer.Weights_cff import *
+from BoostedTTH.BoostedAnalyzer.DMControlSelection_cff import *
+
 
 BoostedAnalyzer = cms.EDAnalyzer(
     'BoostedAnalyzer',
@@ -13,9 +15,9 @@ BoostedAnalyzer = cms.EDAnalyzer(
     checkBasicMCTriggers, # defined in Selection_cff
     filtersMC, # defined in Selection_cff
     MonoJetSelection,
-    SingleMuonControlSelection,
+    # SingleMuonControlSelection,
     monoVselection,
-    
+    DMControlSelection,  #definde in DMControlSelection_cff.py
 
     # weight of one event: calculated as
     # cross section * lumi / (number of generated events with positive weight  -  number of generated events with negative weight )
@@ -52,7 +54,7 @@ BoostedAnalyzer = cms.EDAnalyzer(
     minJetsForMEM = cms.int32(4),
     minTagsForMEM = cms.int32(3),
 
-    selectionNames = cms.vstring("VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","SingleMuonControlSelection","monoVselection"),
+    selectionNames = cms.vstring("VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","SingleMuonControlSelection","monoVselection","DMControlSelection"),
     processorNames = cms.vstring("WeightProcessor","TriggerVarProcessor","DarkMatterProcessor","MonoJetGenSelectionProcessor","MonoVProcessor"),
 
     outfileName = cms.string("BoostedTTH"),

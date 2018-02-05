@@ -40,6 +40,10 @@ import FWCore.ParameterSet.Config as cms
                                #"HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*","HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v*"),
     #dlchannel = cms.string("all"),
 #)
+
+
+
+
     
 MonoJetTriggers = cms.PSet(
     METTriggers = cms.vstring("HLT_PFMET170_*","HLT_PFMETNoMu90_PFMHTNoMu90_IDTight","HLT_PFMETNoMu100_PFMHTNoMu100_IDTight","HLT_PFMETNoMu110_PFMHTNoMu110_IDTight","HLT_PFMETNoMu120_PFMHTNoMu120_IDTight"),
@@ -120,14 +124,14 @@ MonoJetSelection = cms.PSet(
     MonoJet_Nhf=cms.double(0.8)
 )
 
-SingleMuonControlSelection = cms.PSet(
-    max_mt=cms.double(160),
-)
+# SingleMuonControlSelection = cms.PSet(
+    # max_mt=cms.double(160),
+# )
 
 monoVselection = cms.PSet(
     minpt=cms.double(250),
     maxeta=cms.double(2.4),
-    
+
     minPrunedMass=cms.double(65),
     maxPrunedMass=cms.double(105),
     maxtau21_chsPrun=cms.double(0.6),
