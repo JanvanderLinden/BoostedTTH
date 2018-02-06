@@ -733,6 +733,13 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     iEvent.getByToken( customGenJets, CustomGenJets );
     iEvent.getByToken( customGenJetsLoose, CustomGenJetsLoose );
 
+    if(!isData){
+    	iEvent.getByToken( customGenElectrons,CustomGenElectrons );
+    	iEvent.getByToken( customGenMuons,CustomGenMuons );
+    	iEvent.getByToken( customGenTaus,CustomGenTaus );
+    	iEvent.getByToken( customGenJets,CustomGenJets );
+    	iEvent.getByToken( customGenJetsLoose,CustomGenJetsLoose );
+    }
     // selected vertices and set vertex for MiniAODhelper
     // TODO: vertex selection in external producer
     reco::VertexCollection const &vtxs = *h_primaryVertices;
@@ -842,6 +849,13 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     genDarkMatterEvent.Fill();
     //cout << "DarkMatterEvent MET: " << genDarkMatterEvent.ReturnNaiveMET() << endl;
 
+    if(!isData){
+    	genDarkMatterEvent.Initialize(*h_genParticles,packedGenParticles_dummy);
+    	// fill the event
+    	genDarkMatterEvent.Fill();
+    	//cout << "DarkMatterEvent MET: " << genDarkMatterEvent.ReturnNaiveMET() << endl;
+    }
+    
     // nominal weight and weights for reweighting
     std::vector<map<string, float> >weightsVector;
     // inputs
@@ -902,21 +916,21 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
         // all events survive step 0
         cutflows[i_sys].EventSurvivedStep("all", inputs[i_sys].weights.at("Weight"));
         // start with selection=true and change this if one selection fails
-        bool selected = true;
-        // for every systematic: loop over selections
-        for (size_t i_sel = 0; i_sel < selections.size() && selected; i_sel++) {
-            // see if event is selected
-            if (!selections.at(i_sel)->IsSelected(inputs[i_sys], cutflows[i_sys])) {
-                selected = false;
-                // if the vertex,filter or lepton selection is not fulfilled, set the flag to skip the other jec variations
-                if (!selected && i_sel != jet_tag_pos) next_event = true;
-            }
-        }
-        // if the vertex,filter or lepton selection is not fulfilled, skip the other jec variations
-        if (next_event) break;
-        // if one of the jet collections fulfills the selection and mem ntuples are supposed to be written, skip the checks for the other jet collections and go directly to writing
-        at_least_one_selected = at_least_one_selected || selected;
-        if (ProduceMemNtuples && at_least_one_selected) break;
+    	bool selected=true;
+    	// for every systematic: loop over selections
+    	for(size_t i_sel=0; i_sel<selections.size() && selected; i_sel++){
+    	    // see if event is selected
+    	    if(!selections.at(i_sel)->IsSelected(inputs[i_sys],cutflows[i_sys])){
+    		    selected=false;
+                    // if the vertex,filter or lepton selection is not fulfilled, set the flag to skip the other jec variations
+                    if(!selected && i_sel!=jet_tag_pos && jet_tag_pos!=selections.size()) next_event=true;
+    	    }
+    	}
+    	// if the vertex,filter or lepton selection is not fulfilled, skip the other jec variations
+    	if(next_event) break;
+        // if one of the jet collections fulfills the selection and mem ntuples are supposed to be written, skip the checks for the other jet collections and go directly to writing 
+    	at_least_one_selected = at_least_one_selected || selected;
+        if(ProduceMemNtuples&&at_least_one_selected) break;
         // if normal ntuples are supposed to be written and the selections are fulfilled for the jet collection, then write
         if (!ProduceMemNtuples && selected) treewriters[i_sys]->Process(inputs[i_sys], false); // second parameter: verbose
     }

@@ -97,10 +97,10 @@ filtersData= cms.PSet(
                         "Flag_HBHENoiseIsoFilter",
                         "Flag_EcalDeadCellTriggerPrimitiveFilter",
                         "Flag_eeBadScFilter",
-                        #"BadPFMuonFilter",
-                        #"BadChargedCandidateFilter",
-                        #"badGlobalMuonTaggerMAOD",
-                        #"cloneGlobalMuonTaggerMAOD"
+                        "BadPFMuonFilter",
+                        "BadChargedCandidateFilter",
+                        "badGlobalMuonTaggerMAOD",
+                        "cloneGlobalMuonTaggerMAOD"
                         )
 )
 
@@ -110,10 +110,10 @@ filtersMC= cms.PSet(
                         "Flag_HBHENoiseFilter",
                         "Flag_HBHENoiseIsoFilter",
                         "Flag_EcalDeadCellTriggerPrimitiveFilter",
-                        #"BadPFMuonFilter",
-                        #"BadChargedCandidateFilter",
-                        #"badGlobalMuonTaggerMAOD",
-                        #"cloneGlobalMuonTaggerMAOD"
+                        "BadPFMuonFilter",
+                        "BadChargedCandidateFilter",
+                        "badGlobalMuonTaggerMAOD",
+                        "cloneGlobalMuonTaggerMAOD"
                         )
 )
     
