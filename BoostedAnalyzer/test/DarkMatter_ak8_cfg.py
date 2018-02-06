@@ -69,12 +69,18 @@ if not options.inputFiles:
         options.globalTag = "80X_dataRun2_2016SeptRepro_v7"
         options.dataEra = "2016B"
     else:
+        #DM-Sample
         # options.inputFiles=['root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/DMV_NNPDF30_Axial_Mphi-1000_Mchi-1_gSM-0p25_gDM-1p0_v2_13TeV-powheg/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/5AA7E144-8CB8-E611-A77C-0CC47AD99050.root']
-        # options.inputFiles = ["root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/0CD978DB-0DB7-E611-9C28-141877344134.root"]
-        # options.inputFiles=["root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/062203BC-C0C4-E611-A14A-BC305B390AB4.root"]
-        # options.inputFiles=["root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/1476F163-D2C4-E611-9307-008CFAF558EE.root"]
-        options.inputFiles = [
-            "file:/nfs/dust/cms/user/swieland/MiniAODs/0CD978DB-0DB7-E611-9C28-141877344134.root"]
+        #W+Jets
+        # options.inputFiles=["root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/DYJetsToLL_M-50_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/2AE9984E-D2BD-E611-8213-0025905A6066.root"] 
+        # options.inputFiles = ["file:/nfs/dust/cms/user/swieland/MiniAODs/0CD978DB-0DB7-E611-9C28-141877344134.root"]
+        #Z+Jets
+        # options.inputFiles=["root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/006F1B9A-81D0-E611-B9CE-0025905AA9CC.root"]
+        #QCD
+        # options.inputFiles=["root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/00D17FD4-8EBD-E611-B17D-002590D0AFC2.root]
+        #Gamma+Jets
+        options.inputFiles=["root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv2/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/06604A47-ACBE-E611-A748-0025905A48E4.root"]
+
 
 # checks for correct values and consistency
 if "data" in options.globalTag.lower() and not options.isData:
@@ -338,7 +344,7 @@ for idmod in my_id_modules:
 # lepton selection
 process.load('BoostedTTH.Producers.SelectedLeptonProducers_cfi')
 process.SelectedElectronProducer.leptons = electronCollection
-process.SelectedElectronProducer.ptMins = [10., 10., 40.]
+process.SelectedElectronProducer.ptMins = [10., 10., 10.]
 process.SelectedElectronProducer.etaMaxs = [2.5, 2.5, 2.5]
 process.SelectedElectronProducer.leptonIDs = [
     "electron80XCutBasedV", "electron80XCutBasedT", "electron80XCutBasedT"]
@@ -372,10 +378,10 @@ process.SelectedTauProducer.isData = options.isData
 # photon selection
 process.load('BoostedTTH.Producers.SelectedPhotonProducer_cfi')
 process.SelectedPhotonProducer.photons = cms.InputTag("slimmedPhotons")
-process.SelectedPhotonProducer.ptMins = [15.]
-process.SelectedPhotonProducer.etaMaxs = [2.5]
-process.SelectedPhotonProducer.collectionNames = ["selectedPhotonsLoose"]
-process.SelectedPhotonProducer.IDs = ["loose"]
+process.SelectedPhotonProducer.ptMins = [15.,15.]
+process.SelectedPhotonProducer.etaMaxs = [2.5,2.5]
+process.SelectedPhotonProducer.collectionNames = ["selectedPhotonsLoose","selectedPhotons"]
+process.SelectedPhotonProducer.IDs = ["loose","tight"]
 
 
 ### MET correction with official met tool ###
@@ -658,9 +664,10 @@ process.BoostedAnalyzer.selectionNames = [
     "MonoJetSelection",
     # "LeptonVetoSelection",
     "BTagVetoSelection",
-    "PhotonVetoSelection",
-    "monoVselection",
+    # "PhotonVetoSelection",
     "DMControlSelection",
+    "monoVselection",
+
 ]
 if options.additionalSelection != "NONE":
     process.BoostedAnalyzer.selectionNames += cms.vstring(
@@ -716,7 +723,7 @@ if options.ProduceMemNtuples == True:
     process.BoostedAnalyzer.memNtuples = True
     process.BoostedAnalyzer.processorNames = cms.vstring("SlimmedNtuples")
 
-process.BoostedAnalyzer.channel=("DoubleMuon");
+process.BoostedAnalyzer.channel=("Photon")
 
 
 ##### DEFINE PATH ##########

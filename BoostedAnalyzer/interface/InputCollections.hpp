@@ -44,6 +44,7 @@ InputCollections(   const EventInfo&                              eventInfo_,
                     const std::vector<pat::Electron>&             selectedElectronsDL_,
                     const std::vector<pat::Electron>&             selectedElectronsLoose_,
                     const std::vector<pat::Tau>&                  selectedTaus_,
+                    const std::vector<pat::Photon>&               selectedPhotons_,                    
                     const std::vector<pat::Photon>&               selectedPhotonsLoose_,
                     const std::vector<pat::Jet>&                  selectedJets_,
                     const std::vector<pat::Jet>&                  selectedJetsLoose_,
@@ -80,6 +81,7 @@ InputCollections(   const EventInfo&                              eventInfo_,
                     selectedElectronsDL(selectedElectronsDL_),
                     selectedElectronsLoose(selectedElectronsLoose_),
                     selectedTaus(selectedTaus_),
+                    selectedPhotons(selectedPhotons_),
                     selectedPhotonsLoose(selectedPhotonsLoose_),
                     selectedJets(selectedJets_),
                     selectedJetsLoose(selectedJetsLoose_),
@@ -127,6 +129,7 @@ InputCollections(   const InputCollections&                       input,
                     selectedElectronsDL(input.selectedElectronsDL),
                     selectedElectronsLoose(input.selectedElectronsLoose),
                     selectedTaus(input.selectedTaus),
+                    selectedPhotons(input.selectedPhotons),                    
                     selectedPhotonsLoose(input.selectedPhotonsLoose),
                     selectedJets(selectedJets_),
                     selectedJetsLoose(selectedJetsLoose_),
@@ -161,6 +164,7 @@ InputCollections(   const InputCollections&                       input,
   const std::vector<pat::Electron>&             selectedElectronsDL;
   const std::vector<pat::Electron>&             selectedElectronsLoose;
   const std::vector<pat::Tau>&                  selectedTaus;
+  const std::vector<pat::Photon>&               selectedPhotons;
   const std::vector<pat::Photon>&               selectedPhotonsLoose;
   const std::vector<pat::Jet>&                  selectedJets;
   const std::vector<pat::Jet>&                  selectedJetsLoose;

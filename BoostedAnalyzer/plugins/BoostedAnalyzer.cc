@@ -249,6 +249,8 @@ private:
     edm::EDGetTokenT< pat::ElectronCollection > selectedElectronsLooseToken;
     /** tau token **/
     edm::EDGetTokenT< pat::TauCollection > selectedTausToken;
+        /** tight photons token **/
+    edm::EDGetTokenT< pat::PhotonCollection > selectedPhotonsToken;
     /** loose photons token **/
     edm::EDGetTokenT< pat::PhotonCollection > selectedPhotonsLooseToken;
     /** loose jets data access token **/
@@ -344,6 +346,7 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
     selectedElectronsDLToken     = consumes< pat::ElectronCollection >(iConfig.getParameter<edm::InputTag>("selectedElectronsDL"));
     selectedElectronsLooseToken  = consumes< pat::ElectronCollection >(iConfig.getParameter<edm::InputTag>("selectedElectronsLoose"));
     selectedTausToken       = consumes< pat::TauCollection >(iConfig.getParameter<edm::InputTag>("selectedTaus"));
+    selectedPhotonsToken       = consumes< pat::PhotonCollection >(iConfig.getParameter<edm::InputTag>("selectedPhotons"));    
     selectedPhotonsLooseToken       = consumes< pat::PhotonCollection >(iConfig.getParameter<edm::InputTag>("selectedPhotonsLoose"));
     for (auto &tag : iConfig.getParameter<std::vector<edm::InputTag> >("selectedJets")) {
         selectedJetsTokens.push_back(consumes< std::vector<pat::Jet> >(tag));
@@ -580,9 +583,6 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
         if (std::find(processorNames.begin(), processorNames.end(), "MonoJetGenSelectionProcessor") != processorNames.end()) {
             treewriter->AddTreeProcessor(new MonoJetGenSelectionProcessor(), "MonoJetGenSelectionProcessor");
         }
-        if (std::find(processorNames.begin(), processorNames.end(), "DMControlSelection") != processorNames.end()) {
-            treewriter->AddTreeProcessor(new MonoJetGenSelectionProcessor(), "DMControlSelection");
-        }
     }
 
 
@@ -671,6 +671,8 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     iEvent.getByToken( selectedTausToken, h_selectedTaus );
 
     // PHOTONS
+    edm::Handle< pat::PhotonCollection > h_selectedPhotons;
+    iEvent.getByToken( selectedPhotonsToken, h_selectedPhotons );
     edm::Handle< pat::PhotonCollection > h_selectedPhotonsLoose;
     iEvent.getByToken( selectedPhotonsLooseToken, h_selectedPhotonsLoose );
 
@@ -857,6 +859,7 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
                                           *h_selectedElectronsDL,
                                           *h_selectedElectronsLoose,
                                           *h_selectedTaus,
+                                          *h_selectedPhotons,
                                           *h_selectedPhotonsLoose,
                                           *(hs_selectedJets[isys]),
                                           *(hs_selectedJetsLoose[isys]),
