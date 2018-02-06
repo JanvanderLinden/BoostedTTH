@@ -23,8 +23,8 @@ private:
 	double max_mt;
 	double min_met;
 	double min_pt;
-	double min_mass_mumu;
-	double max_mass_mumu;
+	double min_mass_ll;
+	double max_mass_ll;
 
 
 
