@@ -98,7 +98,7 @@ bool DMControlSelection::IsSelected(const InputCollections& input, Cutflow& cutf
     if (input.selectedMuonsLoose.size() > 0 || input.selectedElectrons.size() != 1 || input.selectedTaus.size() > 0) {
       return false;
     }
-    if (met > min_met) {
+    if (met < min_met) {
       return false;
     }
     else {
@@ -108,22 +108,27 @@ bool DMControlSelection::IsSelected(const InputCollections& input, Cutflow& cutf
   }
 
   if (channel == "DoubleMuon") {
+
     if (input.selectedMuonsLoose.size() != 2 || input.selectedElectrons.size() >  0 || input.selectedTaus.size() > 0) {
       return false;
     }
-    if (input.selectedMuonsLoose.at(0).charge() != input.selectedMuonsLoose.at(1).charge()) {
+    cout << "== 2 loose Muons check" << endl;
+    if (input.selectedMuonsLoose.at(0).charge()*input.selectedMuonsLoose.at(1).charge()>1) {
       return false;
     }
+    cout << "opposite charge check" << endl;
     if (input.selectedMuons.size() < 1 ) {
       return false;
     }
-    if (input.selectedMuons.at(0).pt() < min_pt || input.selectedMuons.at(1).pt() < min_pt) {
-      return false;
+    cout << "min 1 tight Muon" << endl;
+    for (std::vector<pat::Muon>::const_iterator itMuon = input.selectedMuons.begin() ; itMuon != input.selectedMuons.end(); ++itMuon) {
+      if(itMuon->pt() <min_pt) return false;
     }
+    cout << "min_pt check"  << endl;
     math::XYZTLorentzVector muvecs;
-    muvecs = input.selectedMuons.at(0).p4() + input.selectedMuons.at(1).p4();
+    muvecs = input.selectedMuonsLoose.at(0).p4() + input.selectedMuonsLoose.at(1).p4();
     double mass_mumu = muvecs.M();
-    cout << "mass_mumu " << mass_mumu;
+    cout << "mass_mumu " << mass_mumu << endl;
     if (mass_mumu < min_mass_mumu || mass_mumu > max_mass_mumu) {
       return false;
     }
@@ -131,8 +136,8 @@ bool DMControlSelection::IsSelected(const InputCollections& input, Cutflow& cutf
       cutflow.EventSurvivedStep("DoubleMuon Control selection", input.weights.at("Weight"));
       return true;
     }
-
   }
+
   else {
     throw cms::Exception("BadSelection")
         << "channel '" << channel << "' of DMControlSelection does not exist!\n"
