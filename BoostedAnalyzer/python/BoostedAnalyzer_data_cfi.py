@@ -14,8 +14,9 @@ BoostedAnalyzer = cms.EDAnalyzer(
     checkBasicDataTriggers, # defined in Selection_cff
     filtersData, # defined in Selection_cff
     MonoJetSelection,
-    monoVselection,
+    monoVselection,# defined in Selection_cff
     DMControlSelection,  #definde in DMControlSelection_cff.py
+    RecoilSelection,# defined in Selection_cff
 
 
     era = cms.string("2016_80X"), # has little effect so far, might become important for MiniAODhelper
@@ -47,7 +48,7 @@ BoostedAnalyzer = cms.EDAnalyzer(
     minJetsForMEM = cms.int32(4),
     minTagsForMEM = cms.int32(3),
 
-    selectionNames = cms.vstring("FilterSelection","VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","monoVselection","DMControlSelection"),
+    selectionNames = cms.vstring("FilterSelection","VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","monoVselection","DMControlSelection","RecoilSelection"),
     processorNames = cms.vstring("WeightProcessor","TriggerVarProcessor","DarkMatterProcessor","MonoVProcessor"),
 
     outfileName = cms.string("BoostedTTH"),

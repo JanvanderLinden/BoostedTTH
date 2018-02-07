@@ -16,8 +16,9 @@ BoostedAnalyzer = cms.EDAnalyzer(
     filtersMC, # defined in Selection_cff
     MonoJetSelection,
     # SingleMuonControlSelection,
-    monoVselection,
+    monoVselection,# defined in Selection_cff
     DMControlSelection,  #definde in DMControlSelection_cff.py
+    RecoilSelection,# defined in Selection_cff
 
     # weight of one event: calculated as
     # cross section * lumi / (number of generated events with positive weight  -  number of generated events with negative weight )
@@ -54,7 +55,7 @@ BoostedAnalyzer = cms.EDAnalyzer(
     minJetsForMEM = cms.int32(4),
     minTagsForMEM = cms.int32(3),
 
-    selectionNames = cms.vstring("VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","SingleMuonControlSelection","monoVselection","DMControlSelection"),
+    selectionNames = cms.vstring("VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","SingleMuonControlSelection","monoVselection","DMControlSelection","RecoilSelection"),
     processorNames = cms.vstring("WeightProcessor","TriggerVarProcessor","DarkMatterProcessor","MonoJetGenSelectionProcessor","MonoVProcessor"),
 
 

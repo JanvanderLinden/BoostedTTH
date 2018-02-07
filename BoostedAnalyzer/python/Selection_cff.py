@@ -57,6 +57,11 @@ METSelection = cms.PSet(
     maxMET = cms.double(100000),
 )
 
+RecoilSelection = cms.PSet(
+    minRecoil = cms.double(250),
+    maxRecoil = cms.double(100000),
+)
+
 #DiLeptonMETSelection = cms.PSet(
     #minMET = cms.double(-1),
     #maxMET = cms.double(800),

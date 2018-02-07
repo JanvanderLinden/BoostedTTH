@@ -87,6 +87,8 @@
 #include "BoostedTTH/BoostedAnalyzer/interface/SingleMuonControlSelection.hpp"
 #include "BoostedTTH/BoostedAnalyzer/interface/monoVselection.hpp"
 #include "BoostedTTH/BoostedAnalyzer/interface/DMControlSelection.hpp"
+#include "BoostedTTH/BoostedAnalyzer/interface/RecoilSelection.hpp"
+
 
 
 
@@ -438,6 +440,8 @@ BoostedAnalyzer::BoostedAnalyzer(const edm::ParameterSet& iConfig): \
         else if (*itSel == "SingleMuonControlSelection") selections.push_back(new SingleMuonControlSelection(iConfig));
         else if (*itSel == "monoVselection") selections.push_back(new monoVselection(iConfig));
         else if (*itSel == "DMControlSelection") selections.push_back(new DMControlSelection(iConfig));
+        else if (*itSel == "RecoilSelection") selections.push_back(new RecoilSelection(iConfig));
+
 
 
         else cout << "No matching selection found for: " << *itSel << endl;
