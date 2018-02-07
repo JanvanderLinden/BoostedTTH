@@ -1,6 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 from BoostedTTH.BoostedAnalyzer.Selection_cff import *
 from BoostedTTH.BoostedAnalyzer.Inputs_cff import *
+from BoostedTTH.BoostedAnalyzer.DMControlSelection_cff import *
+
 
 BoostedAnalyzer = cms.EDAnalyzer(
     'BoostedAnalyzer',
@@ -12,6 +14,9 @@ BoostedAnalyzer = cms.EDAnalyzer(
     checkBasicDataTriggers, # defined in Selection_cff
     filtersData, # defined in Selection_cff
     MonoJetSelection,
+    monoVselection,
+    DMControlSelection,  #definde in DMControlSelection_cff.py
+
 
     era = cms.string("2016_80X"), # has little effect so far, might become important for MiniAODhelper
     analysisType = cms.string("LJ"), # has little effect so far, might become important for MiniAODhelper
@@ -42,8 +47,8 @@ BoostedAnalyzer = cms.EDAnalyzer(
     minJetsForMEM = cms.int32(4),
     minTagsForMEM = cms.int32(3),
 
-    selectionNames = cms.vstring("FilterSelection","VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","PhotonVetoSelection"),
-    processorNames = cms.vstring("WeightProcessor","TriggerVarProcessor","DarkMatterProcessor"),
+    selectionNames = cms.vstring("FilterSelection","VertexSelection","METSelection","MonoJetSelection","LeptonVetoSelection","BTagVetoSelection","monoVselection","DMControlSelection"),
+    processorNames = cms.vstring("WeightProcessor","TriggerVarProcessor","DarkMatterProcessor","MonoVProcessor"),
 
     outfileName = cms.string("BoostedTTH"),
 )

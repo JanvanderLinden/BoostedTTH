@@ -10,6 +10,6 @@ SelectedPhotonProducer = cms.EDProducer(
 
     ptMins   = cms.vdouble(15),
     etaMaxs  = cms.vdouble(2.5),
-    collectionNames= cms.vstring("selectedPhotonsLoose"),
+    collectionNames= cms.vstring("selectedPhotonsLoose","selectedPhotons"),
     IDs= cms.vstring("loose")
     )
