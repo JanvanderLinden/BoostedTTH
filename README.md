@@ -45,7 +45,7 @@ Follow These Steps:
     #git cms-merge-topic riga:ttHFGenFilter_tagging
  
     # bjetness code
-    #git clone --depth 1 https://github.com/IHEP-CMS/BJetnessTTHbb.git
+    #git clone https://github.com/IHEP-CMS/BJetnessTTHbb.git
     #cd BJetnessTTHbb/BJetness
     #mkdir data
     #cp -r /afs/cern.ch/work/f/fromeo/public/BJetnessTTHbb/JEC/ data/
@@ -55,7 +55,7 @@ Follow These Steps:
     # install common classifier
     mkdir TTH
     cd TTH
-    git clone --depth 1 https://gitlab.cern.ch/ttH/CommonClassifier.git
+    git clone https://gitlab.cern.ch/ttH/CommonClassifier.git
     source CommonClassifier/setup/install_mem.sh
     # use recent version of LHAPDF header
     sed -i '6i#include "LHAPDF/LHAPDF.h"' MEIntegratorStandalone/interface/Integrand.h
